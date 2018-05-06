@@ -36,6 +36,50 @@ be found at [https://hexdocs.pm/sequence](https://hexdocs.pm/sequence).
 * OTP calls the approciate `handle_call` callback to handle a situation - sychronous
 * `handle_cast` is asynchronous, args: call arg and current_state, response: `{:noreply, new_state}`
 * `sys` module. System messages - are sent in the background between processes
+* When we use `GenServer`, Elixir adds defaults to 6 callback functions
+
+6 Callback Functions
+
+(1) 
+```
+init(start_arguments)
+```
+
+(2)
+```
+handle_call(request, from, state)
+```
+Response: `{:reply, result, new_state}`
+
+(3)
+
+```
+handle_cast(request, state)
+```
+Response: `{:noreply, new_state}`
+
+(4)
+```
+handle_info(info, state)
+```
+
+Called to handle incoming messages (not call or cast) e.g. termination, timeout
+
+(5)
+
+```
+terminate(reason, state)
+```
+
+(6)
+```
+code_change(from_version, state, extra)
+```
+
+(7)
+```
+format_status(reason, [pdict, state])
+```
 
 ### Steps
 
@@ -73,6 +117,8 @@ Response: `{:reply, current_number, current_number+1}`
     { :noreply, current_number + delta}
   end
 ```
+
+Invoke: `GenServer.cast(pid, {:increment_number, 200})`
 
 5. Debugging
 
@@ -115,3 +161,16 @@ iex> :sys.get_status pid
 7. Formatting status `format_status` callback
 
 
+8. Exercise 
+
+```
+iex> {:ok, pid} = GenServer.start_link(Sequence.Stack, [1, "two", 3])
+iex> GenServer.cast(pid, {:push, "four"})
+iex> :sys.get_status pid
+{:status, #PID<0.182.0>, {:module, :gen_server},
+ [["$ancestors": [#PID<0.179.0>, #PID<0.57.0>],
+   "$initial_call": {Sequence.Stack, :init, 1}], :running, #PID<0.179.0>, [],
+  [header: 'Status for generic server <0.182.0>',
+   data: [{'Status', :running}, {'Parent', #PID<0.179.0>},
+    {'Logged events', []}], data: [{'State', [1, "two", 3, "four"]}]]]}
+```

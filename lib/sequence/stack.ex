@@ -9,4 +9,8 @@ defmodule Sequence.Stack do
     popped = List.first(current_stack)
     {:reply, popped, List.delete(current_stack, popped)}
   end
+
+  def handle_cast({:push, item}, current_stack) do
+    {:noreply, current_stack ++ [item]}
+  end
 end
