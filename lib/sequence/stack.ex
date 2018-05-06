@@ -11,6 +11,6 @@ defmodule Sequence.Stack do
   end
 
   def handle_cast({:push, item}, current_stack) do
-    {:noreply, current_stack ++ [item]}
+    {:noreply, [item] ++ current_stack}
   end
 end
