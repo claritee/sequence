@@ -174,3 +174,5 @@ iex> :sys.get_status pid
    data: [{'Status', :running}, {'Parent', #PID<0.179.0>},
     {'Logged events', []}], data: [{'State', [1, "two", 3, "four"]}]]]}
 ```
+
+TODO: Naming a Process
